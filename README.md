@@ -106,7 +106,9 @@ python noteapp.py
 
 เปิดเว็บเบราว์เซอร์ไปที่: **http://127.0.0.1:5000**
 
-## ตัวอย่างหน้าเว็ป ![1754162831082](image/README/1754162831082.png)
+## ตัวอย่างหน้าเว็ป
+<img width="1419" height="713" alt="Screenshot 2568-08-03 at 02 26 55" src="https://github.com/user-attachments/assets/0e6c93c0-070d-4ba1-ba51-d76de015e3f4" />
+
 
 ## API Endpoints
 
