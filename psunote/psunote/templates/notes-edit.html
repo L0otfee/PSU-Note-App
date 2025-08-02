@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container mt-4">
+    <h2>แก้ไขโน้ต</h2>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{% if category == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <form method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">ชื่อโน้ต</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ note.title }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">รายละเอียด</label>
+            <textarea class="form-control" id="description" name="description" rows="5">{{ note.description }}</textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="tags" class="form-label">แท็ก</label>
+            <input type="text" class="form-control" id="tags" name="tags" 
+                   value="{% for tag in note.tags %}{{ tag.name }}{% if not loop.last %}, {% endif %}{% endfor %}" 
+                   placeholder="กรอก tags คั่นด้วยจุลภาค เช่น work, personal, important">
+            <small class="form-text text-muted">กรอก tags คั่นด้วยจุลภาค (,)</small>
+        </div>
+        
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">บันทึกการแก้ไข</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">ยกเลิก</a>
+        </div>
+    </form>
+    
+    <div class="mt-4 p-3 bg-light">
+        <h6>ข้อมูลปัจจุบัน:</h6>
+        <p><strong>ชื่อ:</strong> {{ note.title }}</p>
+        <p><strong>รายละเอียด:</strong> {{ note.description }}</p>
+        <p><strong>Tags:</strong> 
+            {% for tag in note.tags %}
+                <span class="badge bg-secondary">{{ tag.name }}</span>
+            {% endfor %}
+        </p>
+    </div>
+</div>
+{% endblock %}

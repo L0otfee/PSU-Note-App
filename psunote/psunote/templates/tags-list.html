@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>จัดการ Tags</h2>
+        <div>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">กลับหน้าหลัก</a>
+            <form method="POST" action="{{ url_for('tags_delete_all') }}" class="d-inline ms-2"
+                  onsubmit="return confirm('คุณแน่ใจหรือไม่ที่จะลบ tags ทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้!')">
+                <button type="submit" class="btn btn-danger">ลบ Tags ทั้งหมด</button>
+            </form>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{% if category == 'error' %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Debug info -->
+    <div class="alert alert-info">
+        <strong>Debug:</strong> พบ {{ tags|length }} tags ในระบบ
+    </div>
+
+    {% if tags and tags|length > 0 %}
+        <div class="row">
+            {% for tag in tags %}
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ tag.name }}</h5>
+                            <p class="card-text text-muted">Tag ID: {{ tag.id }}</p>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('tags_view', tag_name=tag.name) }}" class="btn btn-sm btn-info">ดูโน้ต</a>
+                                <a href="{{ url_for('tags_edit', tag_id=tag.id) }}" class="btn btn-sm btn-warning">แก้ไข</a>
+                                <form method="POST" action="{{ url_for('tags_delete', tag_id=tag.id) }}" class="d-inline"
+                                      onsubmit="return confirm('คุณแน่ใจหรือไม่ที่จะลบ tag: {{ tag.name }}?')">
+                                    <button type="submit" class="btn btn-sm btn-danger">ลบ</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            <h4>ยังไม่มี tags ในระบบ</h4>
+            <p>Tags จะถูกสร้างขึ้นอัตโนมัติเมื่อคุณสร้างโน้ตใหม่และใส่ tags</p>
+            <a href="{{ url_for('notes_create') }}" class="btn btn-primary">สร้างโน้ตใหม่</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
